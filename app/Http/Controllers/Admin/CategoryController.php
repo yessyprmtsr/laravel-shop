@@ -34,7 +34,7 @@ class CategoryController extends Controller
     {
         $categories = Category::orderBy('name', 'asc')->get();
 
-        $this->data['categories'] = $categories->toArray();
+        $this->data['categories'] = $categories->toArray(); //mengenerate ke array
         $this->data['category'] = null;
         return view('admin.categories.form', $this->data);
     }
@@ -47,9 +47,9 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        $params = $request->except('_token');
-        $params['slug'] = Str::slug($params['name']);
-        $params['parent_id'] = 0;
+        $params = $request->except('_token'); //merequest simpan kecuali token
+        $params['slug'] = Str::slug($params['name']); //simpan nama otomatis ke slug
+        $params['parent_id'] = 0; //nilai default 0
 
         if (Category::create($params)) {
             Session::flash('success', 'Category has been saved');
@@ -77,7 +77,9 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $category = Category::findOrFail($id);
+        $this->data['category'] = $category;
+        return view('admin.categories.form',$this->data);
     }
 
     /**
@@ -89,7 +91,13 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $params = $request->except('_token'); //merequest simpan kecuali token
+        $params['slug'] = Str::slug($params['name']); //simpan nama otomatis ke slug
+        $category = Category::findOrFail($id); //agar data yang tidak ditemukan agar di fail
+        if($category->update($params)){
+            Session::flash('success','Data has been updated');
+        }
+        return redirect()->route('categories.index');
     }
 
     /**
@@ -100,6 +108,11 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $category  = Category::findOrFail($id);
+
+        if ($category->delete()) {
+            Session::flash('success', 'Category has been deleted');
+        }
+        return redirect()->route('categories.index');
     }
 }

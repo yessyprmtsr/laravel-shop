@@ -26,7 +26,12 @@
                                         <td>{{ $category->slug }}</td>
                                         <td>{{ $category->parent_id}}</td>
                                         <td>
-
+                                        <a href="{{ url('admin/categories/'.$category->id.'/edit')}}" class="btn btn-info">Edit</a>
+                                        {{-- //sebuah form yang memiliki method delete --}}
+                                        {!! Form::open(['url' => 'admin/categories/'. $category->id, 'class' => 'delete', 'style' => 'display:inline-block']) !!}
+                                        {!! Form::hidden('_method', 'DELETE') !!}
+                                        {!! Form::submit('Remove', ['class' => 'btn btn-danger']) !!}
+                                        {!! Form::close() !!}
                                         </td>
                                     </tr>
                                 @empty
