@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Session;
+
 use App\Category;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CategoryRequest;
 use Illuminate\Http\Request;
+
 
 class CategoryController extends Controller
 {
@@ -27,6 +32,10 @@ class CategoryController extends Controller
      */
     public function create()
     {
+        $categories = Category::orderBy('name', 'asc')->get();
+
+        $this->data['categories'] = $categories->toArray();
+        $this->data['category'] = null;
         return view('admin.categories.form', $this->data);
     }
 
@@ -36,10 +45,18 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        //
+        $params = $request->except('_token');
+        $params['slug'] = Str::slug($params['name']);
+        $params['parent_id'] = 0;
+
+        if (Category::create($params)) {
+            Session::flash('success', 'Category has been saved');
+        }
+        return redirect('admin/categories');
     }
+
 
     /**
      * Display the specified resource.

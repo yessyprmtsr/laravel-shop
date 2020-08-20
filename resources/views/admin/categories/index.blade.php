@@ -9,6 +9,7 @@
                         <h2>Categories</h2>
                     </div>
                     <div class="card-body">
+                        @include('admin.partials.flash')
                         <table class="table table-bordered table-stripped">
                             <thead>
                                 <th>#</th>
@@ -38,7 +39,7 @@
                         {{ $categories->links() }}
                     </div>
                     <button class="card-footer text-right">
-                    <a href="{{ route('admin.categories.create')}}" class="btn btn-primary">Add new</a>
+                    <a href="{{ route('categories.create')}}" class="btn btn-primary">Add new</a>
                     </button>
                 </div>
             </div>

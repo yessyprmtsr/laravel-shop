@@ -13,7 +13,7 @@ class CategoryRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -31,23 +31,23 @@ class CategoryRequest extends FormRequest
         $parentId = (int) $this->get('parent_id');
         $id = (int) $this->get('id');
 
-        if($this->method() == 'PUT'){
-            if($parentId > 0){
-                $name = 'required:unique:categories,name,'.$id.',id,parent_id,'.$parentId;
-            }
-            //user tidak memberikan parent id
-            else {
+        if ($this->method() == 'PUT') {
+            if ($parentId > 0) {
+                $name = 'required|unique:categories,name,'.$id.',id,parent_id,'.$parentId;
+            } else {
                 $name = 'required|unique:categories,name,'.$id;
             }
-            $slug = 'unique:categories,slug'.$id;
-        } //membuat kategori baru
-        else {
+
+            $slug = 'unique:categories,slug,'.$id;
+
+        } else {
             $name = 'required|unique:categories,name,NULL,id,parent_id,'.$parentId;
             $slug = 'unique:categories,slug';
         }
+
         return [
-        'name' => $name,
-        'slug' => $slug
+            'name' => $name,
+            'slug' => $slug,
         ];
     }
 }
