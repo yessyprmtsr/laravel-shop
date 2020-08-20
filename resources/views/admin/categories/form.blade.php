@@ -25,10 +25,16 @@
                             {!! Form::label('name', 'Name') !!}
                             {!! Form::text('name', null, ['class' => 'form-control', 'placeholder' => 'category name']) !!}
                         </div>
-                        {{-- <div class="form-group">
+                        <div class="form-group">
                             {!! Form::label('parent_id', 'Parent') !!}
-                            {!! General::selectMultiLevel('parent_id', $categories, ['class' => 'form-control', 'selected' => !empty(old('parent_id')) ? old('parent_id') : (!empty($category['parent_id']) ? $category['parent_id'] : ''), 'placeholder' => '-- Choose Category --']) !!}
-                        </div> --}}
+                            {{-- //buat helper general --}}
+                            {!! General::selectMultiLevel('parent_id', $categories,
+                                                            [   'class' => 'form-control',
+                                                                // jika pada pengisian form ada selected category
+                                                                'selected' => !empty(old('parent_id')) ? old('parent_id') :
+                                                                 //jika user sudah memilih category namun saat submit gagal maka pakai old parent id sebelumnya
+                                                                (!empty($category['parent_id']) ? $category['parent_id'] : ''), 'placeholder' => '-- Choose Category --']) !!}
+                        </div>
                         <div class="form-footer pt-5 border-top">
                             <button type="submit" class="btn btn-primary btn-default">Save</button>
                         </div>

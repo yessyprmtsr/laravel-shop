@@ -34,8 +34,8 @@ class CategoryController extends Controller
     {
         $categories = Category::orderBy('name', 'asc')->get();
 
-        $this->data['categories'] = $categories->toArray(); //mengenerate ke array
-        $this->data['category'] = null;
+        $this->data['categories'] = $categories->toArray(); //passing data ke view
+        $this->data['category'] = null; //jika user input namun sudah ada
         return view('admin.categories.form', $this->data);
     }
 
@@ -49,7 +49,7 @@ class CategoryController extends Controller
     {
         $params = $request->except('_token'); //merequest simpan kecuali token
         $params['slug'] = Str::slug($params['name']); //simpan nama otomatis ke slug
-        $params['parent_id'] = 0; //nilai default 0
+        $params['parent_id'] = (int) $params['parent_id']; //sesuai inputan user
 
         if (Category::create($params)) {
             Session::flash('success', 'Category has been saved');
