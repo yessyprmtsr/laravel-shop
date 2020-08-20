@@ -65,7 +65,7 @@
                   <!-- User Account -->
                   <li class="dropdown user-menu">
                     <button href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                      <img src="assets/img/user/user.png" class="user-image" alt="User Image" />
+                      <img src="{{asset('/admin/assets/img/user/user.png')}}" class="user-image" alt="User Image" />
                       <span class="d-none d-lg-inline-block">Abdus Salam</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right">

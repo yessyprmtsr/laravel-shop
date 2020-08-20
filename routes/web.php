@@ -20,5 +20,6 @@ Route::group(
 	['namespace' => 'Admin', 'prefix' => 'admin'],
 	function () {
         Route::get('dashboard', 'DashboardController@index');
+        Route::get('/categories/home','CategoryController@index')->name('admin.categories.home');
     }
     );
