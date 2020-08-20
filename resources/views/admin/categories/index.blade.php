@@ -37,6 +37,9 @@
                         </table>
                         {{ $categories->links() }}
                     </div>
+                    <button class="card-footer text-right">
+                    <a href="{{ route('admin.categories.create')}}" class="btn btn-primary">Add new</a>
+                    </button>
                 </div>
             </div>
         </div>

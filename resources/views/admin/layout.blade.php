@@ -60,7 +60,6 @@
 			<div class="content-wrapper">
 				@yield('content')
 			</div>
-			@include('admin.partials.footer')
 		</div>
 	</div>
 
