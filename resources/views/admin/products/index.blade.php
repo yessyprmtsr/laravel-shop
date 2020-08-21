@@ -14,7 +14,6 @@
                             <thead>
                                 <th>#</th>
                                 <th>SKU</th>
-
                                 <th>Name</th>
                                 <th>Price</th>
                                 <th>Status</th>

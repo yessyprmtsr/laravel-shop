@@ -47,8 +47,7 @@
             </li>
 
             <li  class="has-sub" >
-              <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#icons"
-                aria-expanded="false" aria-controls="icons">
+                <a class="sidenav-item-link" href="{{ route('products.index')}}">
                 <i class="mdi mdi-diamond-stone"></i>
                 <span class="nav-text">Products</span> <b class="caret"></b>
               </a>

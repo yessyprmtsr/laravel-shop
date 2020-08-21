@@ -29,6 +29,10 @@ class Product extends Model
     public function categories(){
         return $this->belongsToMany('App\Category', 'product_categories'); //yang kedua nama tabel penghubung
     }
+    //relasi ke product images
+    public function productImages(){
+        return $this->hasMany('App\ProductImage');
+    }
     public static function statuses(){
         return [
             0 => 'draf',

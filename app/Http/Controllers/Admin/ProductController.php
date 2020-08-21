@@ -7,11 +7,14 @@ use Illuminate\Support\Facades\Session;
 
 use App\Category;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductImageRequest;
 use App\Http\Requests\ProductRequest;
 use App\Product;
+use App\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -42,6 +45,7 @@ class ProductController extends Controller
         $categories = Category::orderBy('name','ASC')->get();
         $this->data['categories'] = $categories->toArray();
         $this->data['product'] = null;
+        $this->data['productID'] = 0;
         $this->data['categoryIDs'] = [];
 
         return view('admin.products.form', $this->data);
@@ -101,12 +105,17 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
+        if(empty($id)){
+            return redirect()->route('products.create');
+        }
+
         $product = Product::findOrFail($id);
         $categories = Category::orderBy('name','ASC')->get();
 
         $this->data['categories'] = $categories->toArray();
         $this->data['product'] = $product;
-        $this->data['categoriyIDs'] = $product->categories->pluck('id')->toArray();
+        $this->data['productID'] = $product->id;
+        $this->data['categoryIDs'] = $product->categories->pluck('id')->toArray();
 
         return view('admin.products.form', $this->data);
     }
@@ -146,6 +155,74 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $product  = Product::findOrFail($id);
+
+        if ($product->delete()) {
+            Session::flash('success', 'Products has been deleted');
+        }
+        return redirect()->route('products.index');
+    }
+    public function images($id){
+
+        if (empty($id)) {
+            return redirect()->route('products.create');
+        }
+        $product = Product::findOrFail($id);
+
+        $this->data['productID'] = $product->id;
+        $this->data['productImages'] = $product->productImages;
+
+        return view('admin.products.images', $this->data);
+    }
+
+    public function add_image($id){
+        if (empty($id)) {
+            return redirect()->route('products.index');
+        }
+
+        $product = Product::findOrFail($id);
+
+        $this->data['productID'] = $product->id;
+        $this->data['product'] = $product;
+
+        return view('admin.products.image_form', $this->data);
+    }
+    public function upload_image(ProductImageRequest $request, $id){
+        $product = Product::findOrFail($id);
+        //pengecekan ada file images atau tidak
+        if($request->has('image')){
+            $image = $request->file('image');
+            //buat nama file setelah diupload
+            $name = $product->slug .'_'. time();
+            //buat file name serta extensionnya
+            $fileName = $name . '.' . $image->getClientOriginalExtension();
+            //definisi folder penyimpanan
+            $folder = '/uploads/images';
+            //user menyimpan ke file direktori dri app
+            $filePath = $image->storeAs($folder,$fileName, 'public');
+            //variabel untuk keperluan penyimpanan data ke table
+            $params = [
+                'product_id' => $product->id,
+                'path' => $filePath,
+            ];
+            if(ProductImage::create($params)){
+                Session::flash('success', 'Image has been uploaded');
+            } else {
+                Session::flash('error', 'Image could not be uploaded');
+            }
+            return redirect('admin/products/'.$id.'/images');
+        }
+
+    }
+    public function remove_image($id)
+    {
+
+        $image = ProductImage::findOrFail($id);
+        Storage::disk('public')->delete($image->path);
+        if ($image->delete()) {
+            Session::flash('success', 'Image has been deleted');
+        }
+
+        return redirect('admin/products/' . $image->product->id . '/images');
     }
 }

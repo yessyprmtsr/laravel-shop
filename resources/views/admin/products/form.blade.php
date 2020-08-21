@@ -6,8 +6,12 @@
     $formTitle = !empty($product) ? 'Update' : 'New'
 @endphp
 
+
 <div class="content">
     <div class="row">
+        <div class="col-lg-3">
+            @include('admin.products.product_menus')
+        </div>
         <div class="col-lg-6">
             <div class="card card-default">
                 <div class="card-header card-header-border-bottom">
