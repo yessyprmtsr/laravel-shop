@@ -29,7 +29,7 @@ class Product extends Model
     public function categories(){
         return $this->belongsToMany('App\Category', 'product_categories'); //yang kedua nama tabel penghubung
     }
-    public function statuses(){
+    public static function statuses(){
         return [
             0 => 'draf',
             1 => 'active',

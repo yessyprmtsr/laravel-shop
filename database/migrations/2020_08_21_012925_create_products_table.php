@@ -21,9 +21,9 @@ class CreateProductsTable extends Migration
             $table->string('slug');
             $table->decimal('price', 15, 2);
             $table->decimal('weight', 10, 2);
-            $table->decimal('width', 10, 2);
-            $table->decimal('height', 10, 2);
-            $table->decimal('length', 10, 2);
+            $table->decimal('width', 10, 2)->nullable()->default(null);
+            $table->decimal('height', 10, 2)->nullable()->default(null);
+            $table->decimal('length', 10, 2)->nullable()->default(null);
             $table->text('short_description');
             $table->text('description');
             $table->integer('status');
