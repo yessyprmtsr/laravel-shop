@@ -17,4 +17,8 @@ class Category extends Model
         //setiap kategori dapat dimiliki ole parent
         return $this->belongsTo('App\Category','parent_id');
     }
+    //relasi produk
+    public function products(){
+        return $this->belongsToMany('App\Product','product_Categories');
+    }
 }
