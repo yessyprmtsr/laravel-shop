@@ -101,7 +101,14 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
+        $product = Product::findOrFail($id);
+        $categories = Category::orderBy('name','ASC')->get();
+
+        $this->data['categories'] = $categories->toArray();
+        $this->data['product'] = $product;
+        $this->data['categoriyIDs'] = $product->categories->pluck('id')->toArray();
+
+        return view('admin.products.form', $this->data);
     }
 
     /**
@@ -113,7 +120,22 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $params = $request->except('_token');
+        $params['slug'] = Str::slug($params['name']);
+        $product = Product::findOrFail($id);
+        $saved = false;
+        $saved = DB::transaction(function () use ($product, $params) {
+            $product->update($params);
+            $product->categories()->sync($params['category_ids']);
+
+            return true;
+        });
+        if ($saved){
+            Session::flash('success','Data Product has been updated');
+        } else {
+            Session::flash('error','Data Product could not be updated');
+        }
+        return redirect()->route('products.index');
     }
 
     /**
