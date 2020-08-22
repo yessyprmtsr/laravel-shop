@@ -163,4 +163,26 @@ class AttributeController extends Controller
 
         return redirect('admin/attributes/'. $attributeID .'/options');
     }
+    public function edit_option($optionID)
+    {
+        $option = AttributeOption::findOrFail($optionID);
+
+        $this->data['attributeOption'] = $option;
+        $this->data['attribute'] = $option->attribute;
+
+        return view('admin.attributes.options', $this->data);
+    }
+
+    public function update_option(AttributeOptionRequest $request, $optionID)
+    {
+        $option = AttributeOption::findOrFail($optionID);
+        $params = $request->except('_token');
+
+        if ($option->update($params)) {
+            Session::flash('success', 'Option has been updated');
+        }
+
+        return redirect('admin/attributes/'. $option->attribute->id .'/options');
+    }
+
 }
