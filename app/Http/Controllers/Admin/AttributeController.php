@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Attribute;
+use App\AttributeOption;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AttributeOptionRequest;
 use App\Http\Requests\AttributeRequest;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
@@ -135,12 +137,30 @@ class AttributeController extends Controller
     //menambahakn option dari attributes tertentu
     public function options($attributeID){
         if (empty($attributeID)) {
-            return redirect('admin/attributes');
+            return redirect()->route('attributes.index');
         }
 
         $attribute = Attribute::findOrFail($attributeID);
         $this->data['attribute'] = $attribute;
 
         return view('admin.attributes.options', $this->data);
+    }
+
+    public function store_option(AttributeOptionRequest $request, $attributeID)
+    {
+        if (empty($attributeID)) {
+            return redirect()->route('attributes.index');
+        }
+
+        $params = [
+            'attribute_id' => $attributeID,
+            'name' => $request->get('name'),
+        ];
+
+        if (AttributeOption::create($params)) {
+            Session::flash('success', 'Option has been saved');
+        }
+
+        return redirect('admin/attributes/'. $attributeID .'/options');
     }
 }
