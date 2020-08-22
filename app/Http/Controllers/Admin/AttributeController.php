@@ -132,4 +132,15 @@ class AttributeController extends Controller
 
         return redirect()->route('attributes.index');
     }
+    //menambahakn option dari attributes tertentu
+    public function options($attributeID){
+        if (empty($attributeID)) {
+            return redirect('admin/attributes');
+        }
+
+        $attribute = Attribute::findOrFail($attributeID);
+        $this->data['attribute'] = $attribute;
+
+        return view('admin.attributes.options', $this->data);
+    }
 }

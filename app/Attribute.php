@@ -48,7 +48,7 @@ class Attribute extends Model
     //relasi ke attributeoption
     public function attributeOptions()
     {
-        return $this->hasMany('App\SSSAttributeOption');
+        return $this->hasMany('App\AttributeOption');
     }
 
 }
