@@ -14,6 +14,7 @@ use App\Http\Requests\ProductRequest;
 use App\Product;
 use App\ProductAttributeValue;
 use App\ProductImage;
+use App\ProductInventory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -232,21 +233,48 @@ class ProductsController extends Controller
     {
         $params = $request->except('_token');
         $params['slug'] = Str::slug($params['name']);
+
         $product = Product::findOrFail($id);
+
         $saved = false;
-        $saved = DB::transaction(function () use ($product, $params) {
+        $saved = DB::transaction(function() use ($product, $params) {
+            $categoryIds = !empty($params['category_ids']) ? $params['category_ids'] : [];
             $product->update($params);
-            $product->categories()->sync($params['category_ids']);
+            $product->categories()->sync($categoryIds);
+
+            if ($product->type == 'configurable') {
+                $this->updateProductVariants($params);
+            } else {
+                ProductInventory::updateOrCreate(['product_id' => $product->id], ['qty' => $params['qty']]);
+            }
 
             return true;
         });
-        if ($saved){
-            Session::flash('success','Data Product has been updated');
+
+        if ($saved) {
+            Session::flash('success', 'Product has been saved');
         } else {
-            Session::flash('error','Data Product could not be updated');
+            Session::flash('error', 'Product could not be saved');
         }
+
         return redirect()->route('products.index');
-    }
+        }
+
+        private function updateProductVariants($params)
+        {
+            if ($params['variants']) {
+                foreach ($params['variants'] as $productParams) {
+                    $product = Product::find($productParams['id']);
+                    $product->update($productParams);
+
+                    $product->status = $params['status'];
+                    $product->save();
+
+                    ProductInventory::updateOrCreate(['product_id' => $product->id], ['qty' => $productParams['qty']]);
+                }
+            }
+        }
+
 
     /**
      * Remove the specified resource from storage.
