@@ -54,77 +54,10 @@
             </li>
 
             <li  class="has-sub" >
-              <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#forms"
-                aria-expanded="false" aria-controls="forms">
+                <a class="sidenav-item-link" href="{{ route('attributes.index')}}">
                 <i class="mdi mdi-email-mark-as-unread"></i>
-                <span class="nav-text">Forms</span> <b class="caret"></b>
+                <span class="nav-text">Attributes</span> <b class="caret"></b>
               </a>
-              <ul  class="collapse"  id="forms"
-                data-parent="#sidebar-menu">
-                <div class="sub-menu">
-
-
-
-                      <li >
-                        <a class="sidenav-item-link" href="basic-input.html">
-                          <span class="nav-text">Basic Input</span>
-
-                        </a>
-                      </li>
-
-
-
-
-
-
-                      <li >
-                        <a class="sidenav-item-link" href="input-group.html">
-                          <span class="nav-text">Input Group</span>
-
-                        </a>
-                      </li>
-
-
-
-
-
-
-                      <li >
-                        <a class="sidenav-item-link" href="checkbox-radio.html">
-                          <span class="nav-text">Checkbox & Radio</span>
-
-                        </a>
-                      </li>
-
-
-
-
-
-
-                      <li >
-                        <a class="sidenav-item-link" href="form-validation.html">
-                          <span class="nav-text">Form Validation</span>
-
-                        </a>
-                      </li>
-
-
-
-
-
-
-                      <li >
-                        <a class="sidenav-item-link" href="form-advance.html">
-                          <span class="nav-text">Form Advance</span>
-
-                        </a>
-                      </li>
-
-
-
-
-                </div>
-              </ul>
             </li>
 
 
