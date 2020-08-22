@@ -184,5 +184,19 @@ class AttributeController extends Controller
 
         return redirect('admin/attributes/'. $option->attribute->id .'/options');
     }
+    public function remove_option($optionID)
+    {
+        if (empty($optionID)) {
+            return redirect('admin/attributes');
+        }
+
+        $option = AttributeOption::findOrFail($optionID);
+
+        if ($option->delete()) {
+            Session::flash('success', 'option has been deleted');
+        }
+
+        return redirect('admin/attributes/'. $option->attribute->id .'/options');
+    }
 
 }
