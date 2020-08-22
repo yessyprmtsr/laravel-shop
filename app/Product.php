@@ -26,8 +26,23 @@ class Product extends Model
     public function user(){
         return $this->belongsTo('App\User');
     }
+    public function productInventory(){
+        return $this->hasOne('App\ProductInventory');
+    }
     public function categories(){
         return $this->belongsToMany('App\Category', 'product_categories'); //yang kedua nama tabel penghubung
+    }
+    //product akan relasi dg producct
+    public function variants(){
+        return $this->hasMany('App\Product', 'parent_id');
+    }
+    //relasi ke product parentnya
+    public function parent(){
+        return $this->belongsTo('App\Product','parent_id');
+    }
+    //relasi ke attributes values
+    public function productAttributeValues(){
+        return $this->hasMany('App\ProductAttributeValue');
     }
     //relasi ke product images
     public function productImages(){
@@ -38,6 +53,12 @@ class Product extends Model
             0 => 'draf',
             1 => 'active',
             2 => 'deactive',
+        ];
+    }
+    public static function types(){
+        return [
+            'simple' => 'Simple',
+            'configurable' => 'Configurable',
         ];
     }
 }

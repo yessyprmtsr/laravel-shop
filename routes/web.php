@@ -23,11 +23,11 @@ Route::group(
         Route::get('dashboard', 'DashboardController@index')->name('admin.dashboard');
         Route::resource('categories', 'CategoryController');
         //product
-        Route::resource('products', 'ProductController');
-        Route::get('products/{productID}/images', 'ProductController@images')->name('products.images');
-		Route::get('products/{productID}/add-image', 'ProductController@add_image')->name('products.add_image');
-		Route::post('products/images/{productID}', 'ProductController@upload_image')->name('products.upload_image');
-        Route::delete('products/images/{imageID}', 'ProductController@remove_image')->name('products.remove_image');
+        Route::resource('products', 'ProductsController');
+        Route::get('products/{productID}/images', 'ProductsController@images')->name('products.images');
+		Route::get('products/{productID}/add-image', 'ProductsController@add_image')->name('products.add_image');
+		Route::post('products/images/{productID}', 'ProductsController@upload_image')->name('products.upload_image');
+        Route::delete('products/images/{imageID}', 'ProductsController@remove_image')->name('products.remove_image');
         //attributes
         Route::resource('attributes', 'AttributeController');
         //list option dari attributs

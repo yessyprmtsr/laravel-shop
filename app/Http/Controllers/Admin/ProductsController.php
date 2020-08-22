@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Attribute;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
 
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
-class ProductController extends Controller
+class ProductsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,6 +27,8 @@ class ProductController extends Controller
     public function __construct()
     {
         $this->data['statuses'] = Product::statuses();
+        $this->data['types'] = Product::types();
+
     }
     public function index()
     {
@@ -41,15 +44,23 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //ngambil data category dulu dan nampilin pilihan category
-        $categories = Category::orderBy('name','ASC')->get();
+        $categories = Category::orderBy('name', 'ASC')->get();
+        $configurableAttributes = $this->getConfigurableAttributes();
+
         $this->data['categories'] = $categories->toArray();
         $this->data['product'] = null;
         $this->data['productID'] = 0;
         $this->data['categoryIDs'] = [];
+        $this->data['configurableAttributes'] = $configurableAttributes;
 
         return view('admin.products.form', $this->data);
     }
+
+    private function getConfigurableAttributes()
+    {
+        return Attribute::where('is_configurable', true)->get();
+    }
+
 
     /**
      * Store a newly created resource in storage.

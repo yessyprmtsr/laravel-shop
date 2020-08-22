@@ -79,7 +79,8 @@
 
 		function showHideConfigurableAttributes() {
 			var productType = $(".product-type").val();
-
+            //ketika configurable dipilih maka attribute form akan ditampilka
+            //jika simple maka disebunyikan
 			if (productType == 'configurable') {
 				$(".configurable-attributes").show();
 			} else {

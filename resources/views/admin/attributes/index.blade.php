@@ -28,15 +28,9 @@
                                         <td>
 
                                                 <a href="{{ url('admin/attributes/'. $attribute->id .'/edit') }}" class="btn btn-warning btn-sm">Edit</a>
-
-
-
                                                 @if ($attribute->type == 'select')
                                                 <a href="{{ url('admin/attributes/'. $attribute->id .'/options') }}" class="btn btn-success btn-sm">Options</a>
                                                 @endif
-
-
-
                                                 {!! Form::open(['url' => 'admin/attributes/'. $attribute->id, 'class' => 'delete', 'style' => 'display:inline-block']) !!}
                                                 {!! Form::hidden('_method', 'DELETE') !!}
                                                 {!! Form::submit('Remove', ['class' => 'btn btn-danger btn-sm']) !!}
@@ -53,9 +47,11 @@
                         </table>
                         {{ $attributes->links() }}
                     </div>
+                    @can('add_attributes')
                         <div class="card-footer text-right">
                             <a href="{{ url('admin/attributes/create') }}" class="btn btn-primary">Add New</a>
                         </div>
+                    @endcan
                 </div>
             </div>
         </div>
