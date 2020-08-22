@@ -15,6 +15,7 @@
 		<!-- No Extra plugin used -->
 		<link href="{{ URL::asset('admin/assets/plugins/jvectormap/jquery-jvectormap-2.0.3.css') }}" rel="stylesheet" />
 		<link href="{{ URL::asset('admin/assets/plugins/daterangepicker/daterangepicker.css') }}" rel="stylesheet" />
+		<link href="{{ URL::asset('admin/assets/plugins/toastr/toastr.min.css') }}" rel="stylesheet" />
 		<!-- SLEEK CSS -->
 		<link id="sleek-css" rel="stylesheet" href="{{ URL::asset('admin/assets/css/sleek.css') }}" />
 		<!-- FAVICON -->
@@ -36,8 +37,7 @@
 		NProgress.start();
 	</script>
 	<div class="mobile-sticky-body-overlay"></div>
-
-
+	<div id="toaster"></div>
 	<div class="wrapper">
 		<!-- Github Link -->
 		<a href="https://github.com/tafcoder/sleek-dashboard" class="github-link">
@@ -60,6 +60,7 @@
 			<div class="content-wrapper">
 				@yield('content')
 			</div>
+			@include('admin.partials.footer')
 		</div>
 	</div>
 
@@ -71,6 +72,7 @@
 	<script src="{{ URL::asset('admin/assets/plugins/jvectormap/jquery-jvectormap-world-mill.js') }}"></script>
 	<script src="{{ URL::asset('admin/assets/plugins/daterangepicker/moment.min.js') }}"></script>
 	<script src="{{ URL::asset('admin/assets/plugins/daterangepicker/daterangepicker.js') }}"></script>
+	<script src="{{ URL::asset('admin/assets/plugins/toastr/toastr.min.js') }}"></script>
 	<script src="{{ URL::asset('admin/assets/js/sleek.bundle.js') }}"></script>
 	<script>
 		$(".delete").on("submit", function () {
@@ -79,8 +81,7 @@
 
 		function showHideConfigurableAttributes() {
 			var productType = $(".product-type").val();
-            //ketika configurable dipilih maka attribute form akan ditampilka
-            //jika simple maka disebunyikan
+
 			if (productType == 'configurable') {
 				$(".configurable-attributes").show();
 			} else {

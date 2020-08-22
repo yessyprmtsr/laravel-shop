@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Attribute;
+use App\AttributeOption;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
 
@@ -11,6 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductImageRequest;
 use App\Http\Requests\ProductRequest;
 use App\Product;
+use App\ProductAttributeValue;
 use App\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -60,6 +62,85 @@ class ProductsController extends Controller
     {
         return Attribute::where('is_configurable', true)->get();
     }
+    //looping atribut trus ambil nama trus jadi nama varia produk
+    private function convertVariantAsName($variant)
+    {
+        $variantName = '';
+
+        foreach (array_keys($variant) as $key => $code) {
+            $attributeOptionID = $variant[$code];
+            $attributeOption = AttributeOption::find($attributeOptionID);
+
+            if ($attributeOption) {
+                $variantName .= ' - ' . $attributeOption->name;
+            }
+        }
+        return $variantName;
+    }
+
+    private function generateProductVariants($product,$params){
+        //panggil configurable
+        $configurableAttributes = $this->getConfigurableAttributes();
+        $variantAttributes = [];
+        foreach($configurableAttributes as $attributes){
+            $variantAttributes[$attributes->code] = $params[$attributes->code];
+        }
+        //generate varian yang terjadi dan terbuat dari kombinasi attribut dan pemanggilan atribut kombinasi
+        $variants = $this->generateAttributeCombinations($variantAttributes);
+        //simpan ke table produk
+        //tipe varian simple karna merupakan anak produk dari produk llain
+        if($variants) {
+            foreach($variants as $variant){
+                $variantParams = [
+                    'parent_id' => $product->id,
+                    'user_id' => Auth::user()->id,
+                    'sku' => $product->sku . '-' .implode('-', array_values($variant)),
+                    'type' => 'simple',
+                    'name' => $product->name . $this->convertVariantAsName($variant),
+                ];
+                $variantParams['slug'] = Str::slug($variantParams['name']);
+                $newProductVariant = Product::create($variantParams);
+
+                $categoryIds = !empty($params['category_ids']) ? $params['category_ids'] : [];
+                $newProductVariant->categories()->sync($categoryIds);
+
+                $this->saveProductAttributeValues($newProductVariant, $variant, $product->id);
+            }
+        }
+    }
+    //menyimpan value dari atribut yang dipilih
+    private function saveProductAttributeValues($product, $variant, $parentProductID)
+    {
+        foreach (array_values($variant) as $attributeOptionID) {
+            $attributeOption = AttributeOption::find($attributeOptionID);
+
+            $attributeValueParams = [
+                'parent_product_id' => $parentProductID,
+                'product_id' => $product->id,
+                'attribute_id' => $attributeOption->attribute_id,
+                'text_value' => $attributeOption->name,
+            ];
+
+            ProductAttributeValue::create($attributeValueParams);
+         }
+    }
+    //aray kombinasi atribut menjadi varian produk
+    private function generateAttributeCombinations($arrays){
+        $result = [[]];
+        foreach ($arrays as $property => $property_values) {
+            $tmp = [];
+            foreach ($result as $result_item) {
+                foreach ($property_values as $property_value) {
+                    $tmp[] = array_merge($result_item, array($property => $property_value));
+                }
+            }
+            $result = $tmp;
+        }
+        return $result;
+
+    }
+
+
 
 
     /**
@@ -77,25 +158,34 @@ class ProductsController extends Controller
         $params['user_id'] = Auth::user()->id;
 
         //save data
-        //variable cek berjalan atau ga
-        $saved = false;
+
         //definisikann proses penyimpanan data product
-        $saved = DB::transaction(function () use ($params)
+        $product = DB::transaction(function () use ($params)
         {
+            //tangkap kategori id yang dipilih
+            $categoryIds = !empty($params['category_ids']) ? $params['category_ids'] : [];
             //simpan data produk yg ditambahakn
             $product = Product::create($params);
             //relasi produk dan kategori yg dipilih user
             $product->categories()->sync($params['category_ids']);
-            return true;
+
+
+            //misal user menambah tipe configurable
+            if($params['type'] == 'configurable'){
+                //generate varian produk
+                $this->generateProductVariants($product, $params);
+            }
+            return $product;
         });
-        if ($saved){
+        if ($product){
             Session::flash('success','Data Product has been saved');
         } else {
             Session::flash('error','Data Product could not be saved');
         }
-        return redirect()->route('products.index');
+         return redirect('admin/products/'. $product->id .'/edit/');
 
     }
+
 
     /**
      * Display the specified resource.

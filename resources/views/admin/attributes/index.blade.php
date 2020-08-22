@@ -47,11 +47,11 @@
                         </table>
                         {{ $attributes->links() }}
                     </div>
-                    @can('add_attributes')
+
                         <div class="card-footer text-right">
                             <a href="{{ url('admin/attributes/create') }}" class="btn btn-primary">Add New</a>
                         </div>
-                    @endcan
+
                 </div>
             </div>
         </div>
