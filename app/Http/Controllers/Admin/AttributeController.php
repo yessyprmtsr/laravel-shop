@@ -81,7 +81,11 @@ class AttributeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $attribute = Attribute::findOrFail($id);
+
+        $this->data['attribute'] = $attribute;
+
+        return view('admin.attributes.form', $this->data);
     }
 
     /**
@@ -91,9 +95,25 @@ class AttributeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(AttributeRequest $request, $id)
     {
-        //
+        $params = $request->except('_token');
+        $params['is_required'] = (bool) $params['is_required'];
+        $params['is_unique'] = (bool) $params['is_unique'];
+        $params['is_configurable'] = (bool) $params['is_configurable'];
+        $params['is_filterable'] = (bool) $params['is_filterable'];
+
+        //code dan type di disable agar tidak sembarangan di edit
+        unset($params['code']);
+        unset($params['type']);
+
+        $attribute = Attribute::findOrFail($id);
+
+        if ($attribute->update($params)) {
+            Session::flash('success', 'Attribute has been saved');
+        }
+
+        return redirect()->route('attributes.index');
     }
 
     /**
@@ -104,6 +124,5 @@ class AttributeController extends Controller
      */
     public function destroy($id)
     {
-        //
     }
 }
