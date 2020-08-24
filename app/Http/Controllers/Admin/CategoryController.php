@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Authorizable;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
 
@@ -13,6 +14,7 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    use Authorizable;
     /**
      * Display a listing of the resource.
      *

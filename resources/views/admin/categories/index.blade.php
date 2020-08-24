@@ -26,13 +26,18 @@
                                         <td>{{ $category->slug }}</td>
                                         <td>{{ $category->parent ? $category->parent->name : '' }}</td>
                                         <td>
-                                        <a href="{{ url('admin/categories/'.$category->id.'/edit')}}" class="btn btn-info">Edit</a>
+                                        {{-- membatasi user untuk akses  --}}
+                                        @can('edit_categories')
+                                        <a href="{{ url('admin/categories/'.$category->id.'/edit')}}" class="btn btn-warning">Edit</a>
+                                        @endcan
                                         {{-- //sebuah form yang memiliki method delete --}}
                                         {{-- Form::adalah collectivehtml --}}
+                                        @can('delete_categories')
                                         {!! Form::open(['url' => 'admin/categories/'. $category->id, 'class' => 'delete', 'style' => 'display:inline-block']) !!}
                                         {!! Form::hidden('_method', 'DELETE') !!}
                                         {!! Form::submit('Remove', ['class' => 'btn btn-danger']) !!}
                                         {!! Form::close() !!}
+                                        @endcan
                                         </td>
                                     </tr>
                                 @empty
@@ -44,9 +49,11 @@
                         </table>
                         {{ $categories->links() }}
                     </div>
+                    @can('add_categories')
                     <button class="card-footer text-right">
                     <a href="{{ route('categories.create')}}" class="btn btn-primary">Add new</a>
                     </button>
+                    @endcan
                 </div>
             </div>
         </div>

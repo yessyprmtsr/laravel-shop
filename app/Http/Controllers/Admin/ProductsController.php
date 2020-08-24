@@ -15,6 +15,7 @@ use App\Product;
 use App\ProductAttributeValue;
 use App\ProductImage;
 use App\ProductInventory;
+use App\Authorizable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +23,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductsController extends Controller
 {
+    use Authorizable;
     /**
      * Display a listing of the resource.
      *
