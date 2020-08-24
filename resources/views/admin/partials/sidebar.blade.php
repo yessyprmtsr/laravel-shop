@@ -68,7 +68,7 @@
               <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#tables"
                 aria-expanded="false" aria-controls="tables">
                 <i class="mdi mdi-table"></i>
-                <span class="nav-text">Tables</span> <b class="caret"></b>
+                <span class="nav-text">User and Roles</span> <b class="caret"></b>
               </a>
               <ul  class="collapse"  id="tables"
                 data-parent="#sidebar-menu">
@@ -78,7 +78,7 @@
 
                       <li >
                         <a class="sidenav-item-link" href="basic-tables.html">
-                          <span class="nav-text">Basic Tables</span>
+                          <span class="nav-text">User</span>
 
                         </a>
                       </li>
@@ -89,30 +89,10 @@
 
                   <li  class="has-sub" >
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#data-tables"
-                      aria-expanded="false" aria-controls="data-tables">
-                      <span class="nav-text">Data Tables</span> <b class="caret"></b>
+                      aria-ex panded="false" aria-controls="data-tables">
+                      <span class="nav-text">Roles</span> <b class="caret"></b>
                     </a>
-                    <ul  class="collapse"  id="data-tables">
-                      <div class="sub-menu">
 
-                        <li >
-                          <a href="basic-data-table.html">Basic Data Table</a>
-                        </li>
-
-                        <li >
-                          <a href="responsive-data-table.html">Responsive Data Table</a>
-                        </li>
-
-                        <li >
-                          <a href="hoverable-data-table.html">Hoverable Data Table</a>
-                        </li>
-
-                        <li >
-                          <a href="expendable-data-table.html">Expendable Data Table</a>
-                        </li>
-
-                      </div>
-                    </ul>
                   </li>
 
 
