@@ -31,6 +31,8 @@ class ProductsController extends Controller
      */
     public function __construct()
     {
+        $this->data['currentAdminMenu'] = 'catalog';
+        $this->data['currentAdminSubMenu'] = 'product';
         $this->data['statuses'] = Product::statuses();
         $this->data['types'] = Product::types();
 

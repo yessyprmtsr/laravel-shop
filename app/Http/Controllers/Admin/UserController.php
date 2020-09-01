@@ -19,6 +19,13 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->data['currentAdminMenu'] = 'role-user';
+        $this->data['currentAdminSubMenu'] = 'user';
+    }
+
     public function index()
     {
         $this->data['users'] = User::latest()->paginate(10);

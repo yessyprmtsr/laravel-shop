@@ -11,4 +11,15 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     protected $data = [];
+
+    public function __construct(){
+        $this->initAdminMenu();
+    }
+
+    //menu user pertama kali
+    private function initAdminMenu(){
+
+        $this->data['currentAdminMenu'] = 'dashboard';
+        $this->data['currentAdminSubMenu'] = '';
+    }
 }

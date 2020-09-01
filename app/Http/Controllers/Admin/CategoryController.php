@@ -20,6 +20,11 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->data['currentAdminMenu'] = 'catalog';
+        $this->data['currentAdminSubMenu'] = 'category';
+    }
     public function index()
     {
         $this->data['categories'] = Category::orderBy('name', 'ASC')->paginate(10);

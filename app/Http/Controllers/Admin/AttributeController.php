@@ -16,6 +16,8 @@ class AttributeController extends Controller
     use Authorizable;
     public function __construct()
     {
+        $this->data['currentAdminMenu'] = 'catalog';
+        $this->data['currentAdminSubMenu'] = 'atrribute';
         $this->data['types'] = Attribute::types();
         $this->data['booleanOptions'] = Attribute::booleanOptions();
         $this->data['validations'] = Attribute::validations();

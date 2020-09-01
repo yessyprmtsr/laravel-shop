@@ -17,11 +17,17 @@ class RoleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct() {
+        parent::__construct();
+        $this->data['currentAdminMenu'] = 'role-user';
+        $this->data['currentAdminSubMenu'] = 'user';
+    }
     public function index()
     {
-        $roles = Role::all();
-        $permissions = Permission::all();
-        return view('admin.roles.index',compact('roles','permissions'));
+        $this->data['roles'] = Role::all();
+        $this->data['permissions'] = Permission::all();
+
+        return view('admin.roles.index', $this->data);
     }
 
     /**
