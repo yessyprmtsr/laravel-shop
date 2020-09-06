@@ -38,7 +38,7 @@
                                     <li><a href="contact.html">contact</a></li>
                                 </ul>
                             </li>
-                            <li><a href="{{ url('products') }}">shop</a>
+                            <li><a href="{{ route('userproduct') }}">Shop</a>
                                 <div class="category-menu-dropdown shop-menu">
                                     <div class="category-dropdown-style category-common2 mb-30">
                                         <h4 class="categories-subtitle"> shop layout</h4>
@@ -153,7 +153,7 @@
                                 </li>
                                 <li><a href="contact.html"> Contact  </a></li>
                             </ul>
-                        </nav>							
+                        </nav>
                     </div>
                 </div>
             </div>

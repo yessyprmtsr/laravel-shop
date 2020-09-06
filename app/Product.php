@@ -34,7 +34,7 @@ class Product extends Model
     }
     //product akan relasi dg producct
     public function variants(){
-        return $this->hasMany('App\Product', 'parent_id');
+        return $this->hasMany('App\Product', 'parent_id')->orderBy('price','ASC');
     }
     //relasi ke product parentnya
     public function parent(){
@@ -67,4 +67,18 @@ class Product extends Model
             'configurable' => 'Configurable',
         ];
     }
+    //aktifkan data ke sisi customernya
+    public function scopeActive($query)
+    {
+        return $query->where('status', 1)
+                     ->where('parent_id', NULL)
+                     ->orderBy('created_at', 'DESC');
+    }
+    //nampilin price labelnya
+    function price_label()
+	{
+        //apakah varian produk ada atau tidak
+		return ($this->variants->count() > 0) ? $this->variants->first()->price : $this->price;
+	}
+
 }
