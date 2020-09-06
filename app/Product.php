@@ -46,7 +46,7 @@ class Product extends Model
     }
     //relasi ke product images
     public function productImages(){
-        return $this->hasMany('App\ProductImage');
+        return $this->hasMany('App\ProductImage')->orderBy('id','DESC');
     }
     public static function statuses(){
         return [
