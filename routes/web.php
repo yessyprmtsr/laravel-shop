@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'HomeController@index');
 Route::get('/products','ProductController@index')->name('userproduct');
+//buat detail product
+Route::get('/products/{slug}','ProductController@show')->name('userproduct.detail');
 Route::group(
 	['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['auth']],
 	function () {
