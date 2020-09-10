@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Product;
 use App\ProductAttributeValue;
+use App\Category;
 use Illuminate\Http\Request;
 use Str;
 
@@ -14,6 +15,10 @@ class ProductController extends Controller
         parent::__construct();
         //definisi varibel dulu untuk search
         $this->data['q'] = null;
+        //nampilin kategori
+        $this->data['categories'] = Category::parentCategories()
+        ->orderBy('name', 'asc')
+        ->get();
     }
     /**
      * Display a listing of the resource.
@@ -36,8 +41,22 @@ class ProductController extends Controller
             $products = $products->whereRaw('MATCH(name, slug, short_description, description) AGAINST (? IN NATURAL LANGUAGE MODE)', [$q]);
             //kalo awal query null,setelah user input maka request
             $this->data['q'] = $q;
-
         }
+           //nmenangkap inputan query stringuntuk category
+            if ($categorySlug = $request->query('category')) {
+                $category = Category::where('slug', $categorySlug)->firstOrFail();
+                //nampilin anak kategori
+                $childIds = Category::childIds($category->id);
+                $categoryIds = array_merge([$category->id], $childIds); //digabungkan
+
+                $products = $products->whereHas(
+                    'categories',
+                    function ($query) use ($categoryIds) {
+                        $query->whereIn('categories.id', $categoryIds);
+                    }
+                );
+            }
+
         $this->data['products'] = $products->paginate(9);
         //ambil template
         return $this->load_theme('products.index', $this->data);

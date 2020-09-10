@@ -22,18 +22,20 @@
         </div>
     </div>
 
-    <div class="sidebar-widget mb-45">
-        <h3 class="sidebar-title">Categories</h3>
-        <div class="sidebar-categories">
-            <ul>
-                <li><a href="#">Accessories <span>4</span></a></li>
-                <li><a href="#">Book <span>9</span></a></li>
-                <li><a href="#">Clothing <span>5</span> </a></li>
-                <li><a href="#">Homelife <span>3</span></a></li>
-                <li><a href="#">Kids & Baby <span>4</span></a></li>
-            </ul>
-        </div>
-    </div>
+
+    @if ($categories)
+		<div class="sidebar-widget mb-45">
+			<h3 class="sidebar-title">Categories</h3>
+			<div class="sidebar-categories">
+				<ul>
+					@foreach ($categories as $category)
+							<li><a href="{{ url('products?category='. $category->slug) }}">{{ $category->name }}</a></li>
+					@endforeach
+				</ul>
+			</div>
+		</div>
+	@endif
+
     <div class="sidebar-widget sidebar-overflow mb-45">
         <h3 class="sidebar-title">color</h3>
         <div class="product-color">
