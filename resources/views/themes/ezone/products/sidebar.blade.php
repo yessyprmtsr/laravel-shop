@@ -1,26 +1,22 @@
 <div class="shop-sidebar mr-50">
-    <div class="sidebar-widget mb-50">
-        <h3 class="sidebar-title">Search Products</h3>
-        <div class="sidebar-search">
-            <form action="#">
-                <input placeholder="Search Products..." type="text">
-                <button><i class="ti-search"></i></button>
-            </form>
-        </div>
-    </div>
-    <div class="sidebar-widget mb-40">
-        <h3 class="sidebar-title">Filter by Price</h3>
-        <div class="price_filter">
-            <div id="slider-range"></div>
-            <div class="price_slider_amount">
-                <div class="label-input">
-                    <label>Price : </label>
-                    <input type="text" id="amount" name="price"  placeholder="$200-$500" />
-                </div>
-                <button type="button">Filter</button>
-            </div>
-        </div>
-    </div>
+    <form method="GET" action="{{ url('products')}}">
+		<div class="sidebar-widget mb-40">
+			<h3 class="sidebar-title">Filter by Price</h3>
+			<div class="price_filter">
+				<div id="slider-range"></div>
+				<div class="price_slider_amount">
+					<div class="label-input">
+						<label>price : </label>
+						<input type="text" id="amount" name="price"  placeholder="Add Your Price" style="width:170px" />
+						<input type="hidden" id="productMinPrice" value="{{ $minPrice }}"/>
+                        <input type="hidden" id="productMaxPrice" value="{{ $maxPrice }}"/>
+
+					</div>
+                    <button type="submit">Filter</button>
+				</div>
+			</div>
+		</div>
+    </form>
 
 
     @if ($categories)

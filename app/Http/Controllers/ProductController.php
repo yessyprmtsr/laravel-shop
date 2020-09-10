@@ -19,6 +19,10 @@ class ProductController extends Controller
         $this->data['categories'] = Category::parentCategories()
         ->orderBy('name', 'asc')
         ->get();
+        //filter harga nentuin max sama min harga dullu
+        $this->data['minPrice'] = Product::min('price');
+		$this->data['maxPrice'] = Product::max('price');
+
     }
     /**
      * Display a listing of the resource.
@@ -56,7 +60,33 @@ class ProductController extends Controller
                     }
                 );
             }
+        //atur filter produk sesuai rentang harga
+        $lowPrice =null;
+        $highPrice = null;
+        //dapatkan query
+        if ($priceSlider = $request->query('price')) {
+            //agar tidak ada simbol
+			$prices = explode('-', $priceSlider);
+            //akan dapatkan lowprice dan high
+			$lowPrice = !empty($prices[0]) ? (float)$prices[0] : $this->data['minPrice']; //kalo tidak kososng dan index 0 akan assign float, kalo gaada quey ato filter defaultnya adalah main class dari product yang ada di database
+			$highPrice = !empty($prices[1]) ? (float)$prices[1] : $this->data['maxPrice'];
 
+            //jika lowprice dan highprice sudah diisikan
+			if ($lowPrice && $highPrice) {
+				$products = $products->where('price', '>=', $lowPrice) //
+					->where('price', '<=', $highPrice)
+					->orWhereHas( //untuk configurable product
+						'variants', //cek untuk configurable product
+						function ($query) use ($lowPrice, $highPrice) {
+							$query->where('price', '>=', $lowPrice)
+								->where('price', '<=', $highPrice);
+						}
+					);
+
+				$this->data['minPrice'] = $lowPrice;
+				$this->data['maxPrice'] = $highPrice;
+			}
+		}
         $this->data['products'] = $products->paginate(9);
         //ambil template
         return $this->load_theme('products.index', $this->data);
