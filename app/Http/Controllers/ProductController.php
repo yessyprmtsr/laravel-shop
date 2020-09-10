@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Product;
 use App\ProductAttributeValue;
 use Illuminate\Http\Request;
+use Str;
 
 class ProductController extends Controller
 {
     public function __construct()
     {
         parent::__construct();
+        //definisi varibel dulu untuk search
+        $this->data['q'] = null;
     }
     /**
      * Display a listing of the resource.
@@ -18,10 +21,24 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function index()
+    public function index(Request $request)
     {
-        $this->data['products'] = Product::active()->paginate(9);
+        //gunakan query builder laravel untuk search
+        $products = Product::active();
         // var_dump($this->data);
+
+        //menangkap inputan dari user
+        if ($q = $request->query('q')) {
+			$q = str_replace('-', ' ', Str::slug($q));
+			 //ngehilangin karakter
+
+            //cari yang sama
+            $products = $products->whereRaw('MATCH(name, slug, short_description, description) AGAINST (? IN NATURAL LANGUAGE MODE)', [$q]);
+            //kalo awal query null,setelah user input maka request
+            $this->data['q'] = $q;
+
+        }
+        $this->data['products'] = $products->paginate(9);
         //ambil template
         return $this->load_theme('products.index', $this->data);
     }
@@ -47,7 +64,7 @@ class ProductController extends Controller
         }
         //cek configurable produk
         if($product->type == "configurable"){
-            //panggil atribute warna
+            //panggil atribute warna dan sizes
             $this->data['colors'] = ProductAttributeValue::getAttributeOptions($product, 'color')->pluck('text_value', 'text_value');
 			$this->data['sizes'] = ProductAttributeValue::getAttributeOptions($product, 'size')->pluck('text_value', 'text_value');
         }

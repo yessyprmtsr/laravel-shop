@@ -182,8 +182,8 @@
 					</ul>
                 </div>
                 <div class="furniture-search">
-                    <form action="{{ url('products') }}" method="GET">
-                        <input placeholder="I am Searching for . . ." type="text" name="q" value="{{ isset($q) ? $q : null }}">
+                    <form action="{{ route('userproduct')}}" method="GET">
+                        <input placeholder="I am Searching for . . ." type="text" name="q" value="{{ isset($q) ? $q : null }} "> {{--kalo user belum ngetikin samsek maka yg tampil placeholder--}}
                         <button>
                             <i class="ti-search"></i>
                         </button>
