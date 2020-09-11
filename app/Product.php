@@ -42,7 +42,7 @@ class Product extends Model
     }
     //relasi ke attributes values
     public function productAttributeValues(){
-        return $this->hasMany('App\ProductAttributeValue');
+        return $this->hasMany('App\ProductAttributeValue','parent_product_id'); //relasi ke parent_product_id
     }
     //relasi ke product images
     public function productImages(){

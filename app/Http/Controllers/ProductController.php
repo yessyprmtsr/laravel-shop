@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Product;
 use App\ProductAttributeValue;
 use App\Category;
+use App\AttributeOption;
 use Illuminate\Http\Request;
 use Str;
 
@@ -22,7 +23,12 @@ class ProductController extends Controller
         //filter harga nentuin max sama min harga dullu
         $this->data['minPrice'] = Product::min('price');
 		$this->data['maxPrice'] = Product::max('price');
+        //filter color
 
+        $this->data['colors'] = AttributeOption::whereHas('attribute', function ($query) { //cari attribute di attrbibute option
+                                $query  ->where('code','color') //cari color
+                                        ->where('is_filterable',1); //is filterablenya adalah satu/ada
+                                })->orderBy('name','ASC')->get();
     }
     /**
      * Display a listing of the resource.
@@ -86,7 +92,21 @@ class ProductController extends Controller
 				$this->data['minPrice'] = $lowPrice;
 				$this->data['maxPrice'] = $highPrice;
 			}
-		}
+        }
+
+        //ambil attribute option id
+        if($attributeOptionID = $request->query('option')){
+            $attribtueOption = AttributeOption::findorFail($attributeOptionID);
+
+            //query ke products
+            //ketika user memilih attribute option contoh 5 maka akan mencari ke product attribute values yang dikaitkan ke attribute id lalu dengan textvalue di product attribute values
+            $products = $products->whereHas('ProductAttributeValues', function ($query) use ($attribtueOption){
+                        $query->where('attribute_id',$attribtueOption->attribute_id)
+                                ->where('text_value',$attribtueOption->name);
+            });
+            //product hanya nampilin parent aja jadi kudu ditambahi kolom product_attributes_value dengan kolom parent id jadi ada relasi lgsung ke attribute value
+        }
+
         $this->data['products'] = $products->paginate(9);
         //ambil template
         return $this->load_theme('products.index', $this->data);

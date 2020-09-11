@@ -1,7 +1,7 @@
 <div class="col-md-6 col-xl-4">
 	<div class="product-wrapper mb-30">
 		<div class="product-img">
-			<a href="{{ url('product/'. $product->slug) }}">
+			<a href="{{ url('products/'. $product->slug) }}">
 				@if ($product->productImages->first())
 					<img src="{{ asset('storage/'.$product->productImages->first()->path) }}" alt="{{ $product->name }}">
 				@else
@@ -20,9 +20,10 @@
 					<i class="pe-7s-look"></i>
 				</a>
 			</div>
-		</div>
+        </div>
+
 		<div class="product-content">
-			<h4><a href="{{ url('product/'. $product->slug) }}">{{ $product->name }}</a></h4>
+			<h4><a href="{{ url('products/'. $product->slug) }}">{{ $product->name }}</a></h4>
 			<span>{{ number_format($product->price_label()) }}</span>
 		</div>
 	</div>

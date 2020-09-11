@@ -1,7 +1,7 @@
 <div class="col-lg-12">
     <div class="product-wrapper mb-30 single-product-list product-list-right-pr mb-60">
         <div class="product-img list-img-width">
-            <a href="{{ url('product/'. $product->slug) }}">
+            <a href="{{ url('products/'. $product->slug) }}">
                 @if ($product->productImages->first())
 					<img src="{{ asset('storage/'.$product->productImages->first()->path) }}" alt="{{ $product->name }}">
 				@else
@@ -17,7 +17,7 @@
         </div>
         <div class="product-content-list">
             <div class="product-list-info">
-                <h4><a href="{{ url('product/'. $product->slug) }}">{{ $product->name }}</a></h4>
+                <h4><a href="{{ url('products/'. $product->slug) }}">{{ $product->name }}</a></h4>
                 <span>{{ number_format($product->price_label()) }}</span>
                 <p>{!! $product->short_description !!}</p>
             </div>

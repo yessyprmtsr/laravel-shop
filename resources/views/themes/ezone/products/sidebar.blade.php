@@ -18,7 +18,7 @@
 		</div>
     </form>
 
-
+    {{-- tampil kategori --}}
     @if ($categories)
 		<div class="sidebar-widget mb-45">
 			<h3 class="sidebar-title">Categories</h3>
@@ -32,19 +32,22 @@
 		</div>
 	@endif
 
-    <div class="sidebar-widget sidebar-overflow mb-45">
-        <h3 class="sidebar-title">color</h3>
-        <div class="product-color">
-            <ul>
-                <li class="red">b</li>
-                <li class="pink">p</li>
-                <li class="blue">b</li>
-                <li class="sky">b</li>
-                <li class="green">y</li>
-                <li class="purple">g</li>
-            </ul>
-        </div>
-    </div>
+    {{-- tampil color --}}
+
+    @if ($colors)
+		<div class="sidebar-widget sidebar-overflow mb-45">
+			<h3 class="sidebar-title">color</h3>
+			<div class="sidebar-categories">
+				<ul>
+					@foreach ($colors as $color)
+						<li><a href="{{ url('products?option='. $color->id) }}">{{ $color->name }}</a></li>
+					@endforeach
+				</ul>
+			</div>
+		</div>
+    @endif
+
+
     <div class="sidebar-widget mb-40">
         <h3 class="sidebar-title">size</h3>
         <div class="product-size">
