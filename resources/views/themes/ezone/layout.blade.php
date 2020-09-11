@@ -52,10 +52,22 @@
         <script src="{{ asset('themes/ezone/assets/js/plugins.js') }}"></script>
         <script src="{{ asset('themes/ezone/assets/js/main.js') }}"></script>
         <script src="{{ asset('themes/ezone/assets/js/app.js') }}"></script>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
         <script>
-            $(".delete").on("click", function () {
-                return confirm("Do you want to remove this?");
-            });
+                $('.delete').on('click', function (event) {
+        event.preventDefault();
+        const url = $(this).attr('href');
+        swal({
+            title: 'Are you sure?',
+            text: 'This record and it`s details will be permanantly deleted!',
+            icon: 'warning',
+            buttons: ["Cancel", "Yes!"],
+        }).then(function(value) {
+            if (value) {
+                window.location.href = url;
+            }
+        });
+    });
         </script>
     </body>
 </html>

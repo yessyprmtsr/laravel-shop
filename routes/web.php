@@ -18,6 +18,12 @@ Route::get('/', 'HomeController@index');
 Route::get('/products','ProductController@index')->name('userproduct');
 //buat detail product
 Route::get('/products/{slug}','ProductController@show')->name('userproduct.detail');
+//display shopping cart
+Route::get('/carts','CartController@index')->name('cart.index');
+Route::get('/carts/remove/{cartID}','CartController@destroy')->name('cart.destroy');
+Route::post('/carts','CartController@store');
+Route::post('/carts/update','CartController@update');
+
 Route::group(
 	['namespace' => 'Admin', 'prefix' => 'admin', 'middleware' => ['auth']],
 	function () {

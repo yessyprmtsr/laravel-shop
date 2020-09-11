@@ -4,10 +4,10 @@
 	<div class="breadcrumb-area pt-205 pb-210" style="background-image: url({{ asset('themes/ezone/assets/img/bg/breadcrumb.jpg') }})">
 		<div class="container">
 			<div class="breadcrumb-content text-center">
-				<h2>Product Details</h2>
+				<h2>product details</h2>
 				<ul>
 					<li><a href="/">home</a></li>
-					<li> Product Details </li>
+					<li> product details </li>
 				</ul>
 			</div>
 		</div>
@@ -69,10 +69,14 @@
 						<div class="details-price">
 							<span>{{ number_format($product->price_label()) }}</span>
 						</div>
-						<p>{{ $product->short_description }}</p>
-						{!! Form::open(['url' => 'carts']) !!}
+                        <p>{{ $product->short_description }}</p>
+                        {{-- arahin form ke url carts --}}
+                        {!! Form::open(['url' => 'carts']) !!}
+                        {{-- inputan yang diperlukan --}}
+
 							{{ Form::hidden('product_id', $product->id) }}
-							@if ($product->type == 'configurable')
+                            {{-- jika configurable --}}
+                            @if ($product->type == 'configurable')
 								<div class="quick-view-select">
 									<div class="select-option-part">
 										<label>Size*</label>
@@ -84,9 +88,11 @@
 									</div>
 								</div>
 							@endif
-
+                                {{-- untuk atur nambahin ke cart --}}
 							<div class="quickview-plus-minus">
 								<div class="cart-plus-minus">
+                                    {{-- simple product ato configurable product ada --}}
+                                    {{-- minimal 1 --}}
 									{!! Form::number('qty', 1, ['class' => 'cart-plus-minus-box', 'placeholder' => 'qty', 'min' => 1]) !!}
 								</div>
 								<div class="quickview-btn-cart">
