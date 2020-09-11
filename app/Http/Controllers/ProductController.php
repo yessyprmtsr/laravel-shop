@@ -34,6 +34,17 @@ class ProductController extends Controller
             $query  ->where('code','size') //cari color
                     ->where('is_filterable',1); //is filterablenya adalah satu/ada
             })->orderBy('name','ASC')->get();
+        //sorting dari price dan created at
+
+		$this->data['sorts'] = [
+			url('products') => 'Default',
+			url('products?sort=price-asc') => 'Price - Low to High',
+			url('products?sort=price-desc') => 'Price - High to Low',
+			url('products?sort=created_at-desc') => 'Newest to Oldest',
+			url('products?sort=created_at-asc') => 'Oldest to Newest',
+		];
+
+		$this->data['selectedSort'] = url('products');
     }
     /**
      * Display a listing of the resource.
@@ -111,6 +122,26 @@ class ProductController extends Controller
             });
             //product hanya nampilin parent aja jadi kudu ditambahi kolom product_attributes_value dengan kolom parent id jadi ada relasi lgsung ke attribute value
         }
+        //untuk fitur sorting
+        //perlu ngehilangin spasi di url ketika
+        if ($sort = preg_replace('/\s+/', '', $request->query('sort'))) {
+			$availableSorts = ['price', 'created_at']; //definisi variable sort hanya price samaa waktu
+			$availableOrder = ['asc', 'desc']; //availablenya cuma ascending dan descending
+			$sortAndOrder = explode('-', $sort); //perlu di explode
+
+			$sortBy = strtolower($sortAndOrder[0]); //huruf kecil semua, dan index ke 0
+			$orderBy = strtolower($sortAndOrder[1]); //huruf kecil semua mulai index 1
+
+             //query data
+            //jika sort by dan available sort sesuai dan order bynya valid maka ngembaliin data products
+            if (in_array($sortBy, $availableSorts) && in_array($orderBy, $availableOrder)) {
+                $products = $products->orderBy($sortBy, $orderBy);
+
+            $this->data['selectedSort'] = url('products?sort='. $sort);
+
+
+			}
+		}
 
         $this->data['products'] = $products->paginate(9);
         //ambil template

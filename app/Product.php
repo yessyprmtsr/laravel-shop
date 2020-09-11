@@ -71,8 +71,8 @@ class Product extends Model
     public function scopeActive($query)
     {
         return $query->where('status', 1)
-                     ->where('parent_id', NULL)
-                     ->orderBy('created_at', 'DESC');
+                     ->where('parent_id', NULL);
+
     }
     //nampilin price labelnya
     function price_label()
