@@ -89,6 +89,25 @@
                     </nav>
                 </div>
                 @include('themes.ezone.partials.mini_cart')
+                <div class="furniture-login">
+                    <ul>
+						@guest
+							<li>Get Access: <a href="{{ url('login') }}">Login</a></li>
+							<li><a href="{{ url('register') }}">Register</a></li>
+						@else
+							<li>Hello: <a href="{{ url('users/profile') }}">{{ Auth::user()->first_name }}</a></li>
+							<a href="{{ route('logout') }}"
+								onclick="event.preventDefault();
+											document.getElementById('logout-form').submit();">
+								{{ __('Logout') }}
+							</a>
+
+							<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+								@csrf
+							</form>
+						@endguest
+					</ul>
+                </div>
             </div>
             <div class="row">
                 <div class="mobile-menu-area d-md-block col-md-12 col-lg-12 col-12 d-lg-none d-xl-none">
@@ -162,28 +181,9 @@
     <div class="header-bottom-furniture wrapper-padding-2 border-top-3">
         <div class="container-fluid">
             <div class="furniture-bottom-wrapper">
-                <div class="furniture-login">
-                    <ul>
-						@guest
-							<li>Get Access: <a href="{{ url('login') }}">Login</a></li>
-							<li><a href="{{ url('register') }}">Register</a></li>
-						@else
-							<li>Hello: <a href="{{ url('users/profile') }}">{{ Auth::user()->first_name }}</a></li>
-							<a href="{{ route('logout') }}"
-								onclick="event.preventDefault();
-											document.getElementById('logout-form').submit();">
-								{{ __('Logout') }}
-							</a>
-
-							<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-								@csrf
-							</form>
-						@endguest
-					</ul>
-                </div>
                 <div class="furniture-search">
                     <form action="{{ route('userproduct')}}" method="GET">
-                        <input placeholder="I am Searching for . . ." type="text" name="q" value="{{ isset($q) ? $q : null }} "> {{--kalo user belum ngetikin samsek maka yg tampil placeholder--}}
+                        Looking For <input type="text" name="q" value="{{ isset($q) ? $q : null }} "> {{--kalo user belum ngetikin samsek maka yg tampil placeholder--}}
                         <button>
                             <i class="ti-search"></i>
                         </button>
@@ -195,7 +195,7 @@
                         <li><a href="wishlist.html"><i class="ti-heart"></i> Wishlist</a></li>
                     </ul>
                 </div>
-            </div>
+
         </div>
     </div>
 </header>
