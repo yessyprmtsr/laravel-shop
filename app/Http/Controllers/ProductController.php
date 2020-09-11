@@ -29,6 +29,11 @@ class ProductController extends Controller
                                 $query  ->where('code','color') //cari color
                                         ->where('is_filterable',1); //is filterablenya adalah satu/ada
                                 })->orderBy('name','ASC')->get();
+        //filter sizes
+        $this->data['sizes'] = AttributeOption::whereHas('attribute', function ($query) { //cari attribute di attrbibute option
+            $query  ->where('code','size') //cari color
+                    ->where('is_filterable',1); //is filterablenya adalah satu/ada
+            })->orderBy('name','ASC')->get();
     }
     /**
      * Display a listing of the resource.
